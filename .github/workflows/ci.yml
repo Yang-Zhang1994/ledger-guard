@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      # Unit tests on a Flink mini cluster, then the Kafka -> Flink -> ClickHouse test in Docker.
+      - name: Build and test
+        run: mvn -B verify
